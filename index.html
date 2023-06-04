@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@600&family=Roboto+Condensed:ital,wght@1,300;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="styles.css" />
+    <title>Factual</title>
+  </head>
+  <body>
+    <header>
+      <img src="/assets/logo.png" alt="Factual Logo" />
+      <h1>Today i Learned</h1>
+      <button>Share A Fact</button>
+    </header>
+    <form action="#">
+      <input type="text" name="Fact" id="fact" placeholder="Input Fact" /><span
+        >200</span
+      >
+      <input type="text" name="source" id="source" placeholder="Add source" />
+      <select name="category" id="category">
+        <option value="">Choose category</option>
+        <option value="tech">Technology</option>
+        <option value="tech">Science</option>
+        <option value="tech">Finance</option>
+      </select>
+      <button>Post</button>
+    </form>
+    <main>
+      <aside>
+        <ul>
+          <li><button>All</button></li>
+          <li><button>Technology</button></li>
+          <li><button>Science</button></li>
+          <li><button>Finance</button></li>
+        </ul>
+      </aside>
+      <section>
+        <ul>
+          <li>
+            <p>
+              Node Is A Runtime environment and not a programming language.
+              <a href="#" target="_blank">(source)</a>
+              <span>#Tech#</span>
+            </p>
+            <div>
+              <button>👍 <strong>2</strong></button>
+              <button>🤯 <strong>4</strong></button>
+              <button>⛔️ <strong>3</strong></button>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </main>
+    <footer></footer>
+  </body>
+</html>

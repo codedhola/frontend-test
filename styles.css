@@ -8,6 +8,7 @@ body {
   font-family: "Roboto Condensed", sans-serif;
   background-color: #18181b;
   color: #fafafa;
+  padding: 38px;
 }
 
 header {
@@ -22,6 +23,12 @@ h1 {
   text-align: center;
 }
 
+main {
+  margin-top: 13px;
+  display: grid;
+  grid-template-columns: 150px 1fr;
+}
+
 .logo {
   display: flex;
   justify-content: flex-start;
@@ -30,23 +37,122 @@ h1 {
 }
 
 .container {
-  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .fact {
-  font-style: italic;
   font-size: 19px;
-  background-color: #a3a3a3;
+  background-color: #44403c;
+  letter-spacing: -1.119px;
   margin-bottom: 8px;
-  padding: 14px 0;
+  padding: 14px 0px 14px 5px;
   display: flex;
-  gap: 10px;
-  justify-content: space-between;
   align-items: center;
+  gap: 2px;
+}
+
+.fact-form {
+  background-color: #44403c;
+  margin-bottom: 40px;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-radius: 16px;
+}
+
+.fact-form input,
+.fact-form select {
+  width: 220px;
+  background-color: #78716c;
+  border: none;
+  border-radius: 100px;
+  padding: 16px;
+  font-size: 18px;
+  color: inherit;
+  font-family: inherit;
+}
+
+.fact-form input::placeholder {
+  color: #a8a29e;
+}
+
+.fact-form input:first-child {
+  flex-grow: 1;
+}
+
+.fact-form span {
+  font-weight: 600;
+  font-size: 18px;
+  margin-right: 18px;
+}
+.btn {
+  font-family: "Oswald", sans-serif;
+  line-height: 1;
+  font-size: 19px;
+  padding: 5px;
+  margin: 3px 0;
+  color: inherit;
+  border-radius: 30px;
+  background-image: linear-gradient(135deg, #3b82f6, #ef4444, #16a34a, #eab308);
+  text-transform: uppercase;
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+.btn:hover {
+  transform: scale(110%) rotate(-2deg);
+}
+
+.btn-tag-all {
+  width: 100%;
+}
+
+.btn-tag {
+  width: 95%;
+  background-image: none;
+}
+
+.btn-large {
+  font-size: 23px;
+  padding: 20px;
+}
+
+.vote-btn {
+  margin-left: auto;
+  display: flex;
+  flex-shrink: 0;
+}
+
+.vote-btn button {
+  border: none;
+  background-color: #78716c;
+  font-size: 18px;
+  padding: 6px 12px;
+  border-radius: 100px;
+  color: inherit;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.source_link:link {
+  color: #c0c0c0;
+  text-decoration: none;
+  transition: 0.6s ease-in;
+}
+
+.source_link:hover,
+.source_link:active {
+  color: #fee2e2;
 }
 
 .tag {
+  padding: 8px;
   font-family: "Oswald", sans-serif;
+  border-radius: 100px;
 }
 
 ul {

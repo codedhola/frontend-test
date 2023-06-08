@@ -21,9 +21,9 @@
           <img src="/assets/logo.png" alt="Factual Logo" width="50px" />
           <h1>Today i Learned</h1>
         </div>
-        <button>Share A Fact</button>
+        <button class="btn btn-large">Share A Fact</button>
       </header>
-      <form action="#">
+      <form action="#" class="fact-form">
         <input
           type="text"
           name="Fact"
@@ -37,15 +37,29 @@
           <option value="tech">Science</option>
           <option value="tech">Finance</option>
         </select>
-        <button>Post</button>
+        <button class="btn btn-large">Post</button>
       </form>
       <main>
         <aside>
           <ul>
-            <li><button>All</button></li>
-            <li><button>Technology</button></li>
-            <li><button>Science</button></li>
-            <li><button>Finance</button></li>
+            <li>
+              <button class="btn btn-tag-all">All</button>
+            </li>
+            <li>
+              <button class="btn btn-tag" style="background-color: red">
+                Technology
+              </button>
+            </li>
+            <li>
+              <button class="btn btn-tag" style="background-color: blue">
+                Science
+              </button>
+            </li>
+            <li>
+              <button class="btn btn-tag" style="background-color: yellow">
+                Finance
+              </button>
+            </li>
           </ul>
         </aside>
         <section>
@@ -53,10 +67,10 @@
             <li class="fact">
               <p>
                 Node Is A Runtime environment and not a programming language.
-                <a href="#" target="_blank">(source)</a>
+                <a class="source_link" href="#" target="_blank">(source)</a>
               </p>
-              <span class="tag" style="background-color: red">Tech</span>
-              <div>
+              <span class="tag" style="background-color: red">Technology</span>
+              <div class="vote-btn">
                 <button>👍 <strong>2</strong></button>
                 <button>🤯 <strong>4</strong></button>
                 <button>⛔️ <strong>3</strong></button>
@@ -66,10 +80,10 @@
               <p>
                 Typescript is the superset of javascript. ----- was created by
                 microsoft inc.
-                <a href="#" target="_blank">(source)</a>
-                <span class="tag" style="background-color: red">Tech</span>
+                <a class="source_link" href="#" target="_blank">(source)</a>
               </p>
-              <div>
+              <span class="tag" style="background-color: red">Technology</span>
+              <div class="vote-btn">
                 <button>👍 <strong>2</strong></button>
                 <button>🤯 <strong>4</strong></button>
                 <button>⛔️ <strong>3</strong></button>

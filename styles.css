@@ -12,9 +12,9 @@ body {
 }
 
 header {
-  margin: 40px;
   display: flex;
   align-items: center;
+  padding: 5px;
   flex-direction: row;
   justify-content: space-between;
 }
@@ -33,6 +33,10 @@ main {
 @media (max-width: 900px) {
   main {
     grid-template-columns: 1fr;
+  }
+
+  .btn-share {
+    font-size: 22px !important;
   }
 }
 
@@ -107,7 +111,7 @@ main {
 
 @media (max-width: 1000px) {
   body {
-    padding: 32px 48px;
+    padding: 32px 44px;
   }
 
   .fact-form {
@@ -192,4 +196,8 @@ main {
 
 ul {
   list-style: none;
+}
+
+.hidden {
+  display: none !important;
 }

@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import "./styles.css";
 
 const CATEGORIES = [
@@ -25,7 +26,8 @@ const initialFacts = [
   },
   {
     id: 2,
-    text: "Millennial dads spend 3 times as much time with their kids than their fathers spent with them. In 1982, 43% of fathers had never changed a diaper. Today, that number is down to 3%",
+    text:
+      "Millennial dads spend 3 times as much time with their kids than their fathers spent with them. In 1982, 43% of fathers had never changed a diaper. Today, that number is down to 3%",
     source:
       "https://www.mother.ly/parenting/millennial-dads-spend-more-time-with-their-kids",
     category: "society",
@@ -48,14 +50,17 @@ const initialFacts = [
 
 function App() {
   const [display, setDisplay] = useState(false);
+  const [facts, setFacts] = useState(initialFacts);
 
   return (
     <>
       <Header display={display} setDisplay={setDisplay} />
-      {display ? <NewFactForm /> : null}
+      {display ? (
+        <NewFactForm setFacts={setFacts} setDisplay={setDisplay} />
+      ) : null}
       <main>
         <CategoryFilter />
-        <FactList />
+        <FactList facts={facts} />
       </main>
     </>
   );
@@ -79,8 +84,55 @@ function Header({ display, setDisplay }) {
   );
 }
 
-function NewFactForm() {
-  return <form className="fact-form">fact form</form>;
+function NewFactForm({ setFacts, setDisplay }) {
+  const [text, setText] = useState("");
+  const [source, setSource] = useState("");
+  const [category, setCategory] = useState("");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newFact = {
+      text: text,
+      source: source,
+      category: category,
+      votesInteresting: 0,
+      votesMindblowing: 0,
+      votesFalse: 0,
+      createdIn: new Date().getFullYear(),
+    };
+
+    setFacts((facts) => [...facts, newFact]);
+    setText("");
+    setCategory("");
+    setSource("");
+    setDisplay(false);
+  }
+
+  return (
+    <form className="fact-form" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="Share A Fact"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <span>{200 - text.length}</span>
+      <input
+        value={source}
+        placeholder="Input Valud Source"
+        onChange={(e) => setSource(e.target.value)}
+      />
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <option value="">Choose Category</option>
+        {CATEGORIES.map((cat) => (
+          <option key={cat.name} value={cat.name}>
+            {cat.name.toUpperCase()}
+          </option>
+        ))}
+      </select>
+      <button className="btn btn-large">Post</button>
+    </form>
+  );
 }
 
 function CategoryFilter() {
@@ -105,18 +157,7 @@ function CategoryFilter() {
   );
 }
 
-// function CategoryList({ cat }) {
-//   return (
-//     <li className="">
-//       <button className="btn btn-tag" style={{ backgroundColor: cat.color }}>
-//         {cat.name}
-//       </button>
-//     </li>
-//   );
-// }
-
-function FactList() {
-  const facts = initialFacts;
+function FactList({ facts }) {
   return (
     <section>
       <ul className="ul">

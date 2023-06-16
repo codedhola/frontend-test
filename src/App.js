@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import supabase from "./supabase";
+import { SpinnerCircular } from "spinners-react";
 
 import "./styles.css";
 
@@ -14,49 +15,26 @@ const CATEGORIES = [
   { name: "news", color: "#8b5cf6" },
 ];
 
-const initialFacts = [
-  {
-    id: 1,
-    text: "React is being developed by Meta (formerly facebook)",
-    source: "https://opensource.fb.com/",
-    category: "technology",
-    votesInteresting: 24,
-    votesMindblowing: 9,
-    votesFalse: 4,
-    createdIn: 2021,
-  },
-  {
-    id: 2,
-    text: "Millennial dads spend 3 times as much time with their kids than their fathers spent with them. In 1982, 43% of fathers had never changed a diaper. Today, that number is down to 3%",
-    source:
-      "https://www.mother.ly/parenting/millennial-dads-spend-more-time-with-their-kids",
-    category: "society",
-    votesInteresting: 11,
-    votesMindblowing: 2,
-    votesFalse: 0,
-    createdIn: 2019,
-  },
-  {
-    id: 3,
-    text: "Lisbon is the capital of Portugal",
-    source: "https://en.wikipedia.org/wiki/Lisbon",
-    category: "society",
-    votesInteresting: 8,
-    votesMindblowing: 3,
-    votesFalse: 1,
-    createdIn: 2015,
-  },
-];
-
 function App() {
   const [display, setDisplay] = useState(false);
   const [facts, setFacts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState("all");
 
   useEffect(function () {
+    setIsLoading(true);
     async function getFacts() {
-      let { data: facts, error } = await supabase.from("facts").select("*");
-      setFacts(facts);
-      console.log(facts);
+      let query = supabase.from("facts").select("*");
+
+      if (currentCategory !== "all") {
+        query = query.eq("category", currentCategory);
+      }
+
+      let { data: facts, error } = await query.limit(5);
+      // let { data: facts, error } = await supabase.from("facts").select("*");
+      if (!error) setFacts(facts);
+      else alert("An Error Occured, please try again later");
+      setIsLoading(false);
     }
     getFacts();
   }, []);
@@ -68,8 +46,8 @@ function App() {
         <NewFactForm setFacts={setFacts} setDisplay={setDisplay} />
       ) : null}
       <main>
-        <CategoryFilter />
-        <FactList facts={facts} />
+        <CategoryFilter setCurrentCategory={setCurrentCategory} />
+        {isLoading ? <Loader /> : <FactList facts={facts} />}
       </main>{" "}
     </>
   );
@@ -144,18 +122,24 @@ function NewFactForm({ setFacts, setDisplay }) {
   );
 }
 
-function CategoryFilter() {
+function CategoryFilter({ setCurrentCategory }) {
   return (
     <aside>
       <ul>
         <li>
-          <button className="btn btn-tag-all">All</button>
+          <button
+            className="btn btn-tag-all"
+            onClick={setCurrentCategory("all")}
+          >
+            All
+          </button>
         </li>
         {CATEGORIES.map((cat) => (
           <li key={cat.name}>
             <button
               className="btn btn-tag"
               style={{ backgroundColor: cat.color }}
+              onClick={setCurrentCategory(cat.name)}
             >
               {cat.name}
             </button>
@@ -204,6 +188,10 @@ function Fact(props) {
       </div>
     </li>
   );
+}
+
+function Loader() {
+  return <SpinnerCircular size={210} />;
 }
 
 export default App;

@@ -38,6 +38,11 @@ main {
   .btn-share {
     font-size: 22px !important;
   }
+
+  .btn-large {
+    font-size: 13.5px !important;
+    padding: 10.5px !important;
+  }
 }
 
 .logo {

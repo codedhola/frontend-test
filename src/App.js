@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import supabase from "./supabase";
-import { SpinnerCircular } from "spinners-react";
+import { ColorRing } from "react-loader-spinner";
 
 import "./styles.css";
 
@@ -21,23 +21,26 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [currentCategory, setCurrentCategory] = useState("all");
 
-  useEffect(function () {
-    setIsLoading(true);
-    async function getFacts() {
-      let query = supabase.from("facts").select("*");
+  useEffect(
+    function () {
+      async function getFacts() {
+        setIsLoading(true);
+        let query = supabase.from("facts").select("*");
 
-      if (currentCategory !== "all") {
-        query = query.eq("category", currentCategory);
+        if (currentCategory !== "all") {
+          query = query.eq("category", currentCategory);
+        }
+
+        let { data: facts, error } = await query.limit(5);
+        // let { data: facts, error } = await supabase.from("facts").select("*");
+        if (!error) setFacts(facts);
+        else alert("An Error Occured, please try again later");
+        setIsLoading(false);
       }
-
-      let { data: facts, error } = await query.limit(5);
-      // let { data: facts, error } = await supabase.from("facts").select("*");
-      if (!error) setFacts(facts);
-      else alert("An Error Occured, please try again later");
-      setIsLoading(false);
-    }
-    getFacts();
-  }, []);
+      getFacts();
+    },
+    [currentCategory]
+  );
 
   return (
     <>
@@ -75,20 +78,29 @@ function NewFactForm({ setFacts, setDisplay }) {
   const [text, setText] = useState("");
   const [source, setSource] = useState("");
   const [category, setCategory] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    const newFact = {
-      text: text,
-      source: source,
-      category: category,
-      votesInteresting: 0,
-      votesMindblowing: 0,
-      votesFalse: 0,
-      createdIn: new Date().getFullYear(),
-    };
+    // const newFact = {
+    //   text: text,
+    //   source: source,
+    //   category: category,
+    //   votesInteresting: 0,
+    //   votesMindblowing: 0,
+    //   votesFalse: 0,
+    //   createdIn: new Date().getFullYear(),
+    // };
 
-    setFacts((facts) => [...facts, newFact]);
+    setIsUploading(true);
+    const { data: newFact, error } = await supabase
+      .from("facts")
+      .insert([{ text, source, category }])
+      .select();
+
+    if (error) return alert("An error occured  ===> " + JSON.stringify(error));
+
+    setFacts((facts) => [newFact[0], ...facts]);
     setText("");
     setCategory("");
     setSource("");
@@ -98,6 +110,7 @@ function NewFactForm({ setFacts, setDisplay }) {
   return (
     <form className="fact-form" onSubmit={handleSubmit}>
       <input
+        disabled={isUploading}
         type="text"
         placeholder="Share A Fact"
         value={text}
@@ -108,8 +121,13 @@ function NewFactForm({ setFacts, setDisplay }) {
         value={source}
         placeholder="Input Valud Source"
         onChange={(e) => setSource(e.target.value)}
+        disabled={isUploading}
       />
-      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+        disabled={isUploading}
+      >
         <option value="">Choose Category</option>
         {CATEGORIES.map((cat) => (
           <option key={cat.name} value={cat.name}>
@@ -117,7 +135,9 @@ function NewFactForm({ setFacts, setDisplay }) {
           </option>
         ))}
       </select>
-      <button className="btn btn-large">Post</button>
+      <button className="btn btn-large" disabled={isUploading}>
+        Post
+      </button>
     </form>
   );
 }
@@ -129,7 +149,7 @@ function CategoryFilter({ setCurrentCategory }) {
         <li>
           <button
             className="btn btn-tag-all"
-            onClick={setCurrentCategory("all")}
+            onClick={() => setCurrentCategory("all")}
           >
             All
           </button>
@@ -139,7 +159,7 @@ function CategoryFilter({ setCurrentCategory }) {
             <button
               className="btn btn-tag"
               style={{ backgroundColor: cat.color }}
-              onClick={setCurrentCategory(cat.name)}
+              onClick={() => setCurrentCategory(cat.name)}
             >
               {cat.name}
             </button>
@@ -191,7 +211,17 @@ function Fact(props) {
 }
 
 function Loader() {
-  return <SpinnerCircular size={210} />;
+  return (
+    <ColorRing
+      visible={true}
+      height="80"
+      width="80"
+      ariaLabel="blocks-loading"
+      wrapperStyle={{}}
+      wrapperClass="blocks-wrapper"
+      colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+    />
+  );
 }
 
 export default App;

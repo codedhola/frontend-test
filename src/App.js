@@ -32,7 +32,6 @@ function App() {
         }
 
         let { data: facts, error } = await query.limit(5);
-        // let { data: facts, error } = await supabase.from("facts").select("*");
         if (!error) setFacts(facts);
         else alert("An Error Occured, please try again later");
         setIsLoading(false);
@@ -50,7 +49,11 @@ function App() {
       ) : null}
       <main>
         <CategoryFilter setCurrentCategory={setCurrentCategory} />
-        {isLoading ? <Loader /> : <FactList facts={facts} />}
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <FactList facts={facts} setFacts={setFacts} />
+        )}
       </main>{" "}
     </>
   );
@@ -82,22 +85,13 @@ function NewFactForm({ setFacts, setDisplay }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // const newFact = {
-    //   text: text,
-    //   source: source,
-    //   category: category,
-    //   votesInteresting: 0,
-    //   votesMindblowing: 0,
-    //   votesFalse: 0,
-    //   createdIn: new Date().getFullYear(),
-    // };
 
     setIsUploading(true);
     const { data: newFact, error } = await supabase
       .from("facts")
       .insert([{ text, source, category }])
       .select();
-
+    setIsUploading(false);
     if (error) return alert("An error occured  ===> " + JSON.stringify(error));
 
     setFacts((facts) => [newFact[0], ...facts]);
@@ -170,12 +164,12 @@ function CategoryFilter({ setCurrentCategory }) {
   );
 }
 
-function FactList({ facts }) {
+function FactList({ facts, setFacts }) {
   return (
     <section>
       <ul className="ul">
         {facts.map((fact) => (
-          <Fact key={fact.id} fact={fact} />
+          <Fact key={fact.id} fact={fact} setFacts={setFacts} />
         ))}
       </ul>
     </section>
@@ -183,7 +177,22 @@ function FactList({ facts }) {
 }
 
 function Fact(props) {
-  const { fact } = props;
+  const { fact, setFacts } = props;
+  const [isUpdating, setIsUpdating] = useState(false);
+  async function handleVotes(vote) {
+    setIsUpdating(true);
+    const { data: updatedFact, error } = await supabase
+      .from("facts")
+      .update({ [vote]: fact[vote] + 1 })
+      .eq("id", fact.id)
+      .select();
+    console.log(updatedFact, error);
+    if (!error)
+      setFacts((facts) =>
+        facts.map((f) => (f.id === fact.id ? updatedFact[0] : f))
+      );
+  }
+
   return (
     <li className="fact">
       <p>
@@ -202,9 +211,24 @@ function Fact(props) {
         {fact.category}
       </span>
       <div className="vote-btn">
-        <button> 👍 {fact.votesInteresting}</button>
-        <button> 🤯 {fact.votesMindblowing}</button>
-        <button> ⛔️ {fact.votesFalse}</button>
+        <button
+          onClick={() => handleVotes("votesInteresting")}
+          disabled={isUpdating}
+        >
+          {" "}
+          👍 {fact.votesInteresting}
+        </button>
+        <button
+          onClick={() => handleVotes("votesMindblowing")}
+          disabled={isUpdating}
+        >
+          {" "}
+          🤯 {fact.votesMindblowing}
+        </button>
+        <button onClick={() => handleVotes("votesFalse")} disabled={isUpdating}>
+          {" "}
+          ⛔️ {fact.votesFalse}
+        </button>
       </div>
     </li>
   );

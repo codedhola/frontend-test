@@ -3,8 +3,14 @@ import React from "react";
 const BlogList = ({ blogs }) => {
   return (
     <div>
+      <h1>Blogs</h1>
       {blogs.map((blog) => (
-        <h2>{blog.title}</h2>
+        <div className="blog-preview" key={blog.id}>
+          <h2>{blog.title}</h2>
+          <p>{blog.body}</p>
+          <p>Author: {blog.author}</p>
+          <button className="del">del</button>
+        </div>
       ))}
     </div>
   );

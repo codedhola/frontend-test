@@ -9,7 +9,7 @@ const Navbar = () => {
           Home
         </a>
         <a href="#" id="">
-          Blogs
+          Blog
         </a>
       </div>
     </nav>

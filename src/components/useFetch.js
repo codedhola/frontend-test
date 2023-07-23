@@ -10,7 +10,6 @@ const useFetch = (url) => {
       .then((res) => {
         console.log(res);
         if (res.status !== 200) {
-          // setIsError(true);
           throw Error("An error occurred");
         }
         return res.json();

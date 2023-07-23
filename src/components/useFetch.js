@@ -8,7 +8,6 @@ const useFetch = (url) => {
   useEffect(() => {
     fetch(url)
       .then((res) => {
-        console.log(res);
         if (res.status !== 200) {
           throw Error("An error occurred");
         }
@@ -21,7 +20,6 @@ const useFetch = (url) => {
       .catch((err) => {
         setIsLoading(false);
         setIsError(true);
-        console.log(err.message);
       });
   }, []);
   return { data, isLoading, isError };
